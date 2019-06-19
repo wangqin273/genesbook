@@ -1,0 +1,70 @@
+<!--pages/previewImage/previewImage.wxml-->
+<view class="swiper_body">
+  <swiper class="swiper_wrap" current="0" bindchange="swiperChange">
+    <block wx:for="{{curData.imgs}}" wx:key="{{index}}">
+      <swiper-item class="swiper-item">
+        <image src="{{item}}" data-src="{{item}}" class="slide-image" catchtap='previewImage' />
+      </swiper-item>
+    </block>
+  </swiper>
+  <view class="swiper_info">
+    <text class="imgs_count">{{curIdx}}</text>
+    <text>/</text>
+    <text class="imgs_lens">{{imgslens}}</text>
+  </view>
+</view>
+<view class="details_body">
+  <view class="details_title  ">
+    <view class="details_userinfo">
+      <image src="{{curData.avatar}}" class="details_avatar" />
+      <text class="details_nickname">{{curData.nickname}} </text>
+    </view>
+    <view class='btn_copy' catchtap="copyId">
+      <text>关注</text>
+    </view>
+  </view>
+  <view class="details_des">
+    <text>{{curData.title}}</text>
+  </view>
+  <view class="like_share">
+    <view class="list_like" data-id="{{curData.id}}" catchtap="likeIt">
+      <image class="list_icon" src="{{curData.liked?'/image/liked.png':'/image/like.png'}}"></image>
+      <text class="list_number">{{curData.like}} </text>
+    </view>
+    <view class='share_box'>
+          <image class="share_ico" src="/image/share_ico.png"></image>
+     <text class="share_txt">分享</text>
+     <button class="share_button" open-type="share"></button>
+    </view>
+  </view>
+</view>
+
+<!-- <view class="details_body margintop">
+  <view class="details_title">
+    <text>交易条款</text>
+  </view>
+  <view class="details_clause">
+      <text>{{curData.clause}}</text>
+  </view>
+</view> -->
+
+<view class="details_fond margintop">
+  <view class="details_title">
+    <text>猜你喜欢</text>
+  </view>
+  <!--引入列表模板-->
+  <import src="/components/list.wxml" />
+  <view class="wrapper">
+    <view class="side_left">
+      <block wx:for="{{list}}" wx:key="">
+        <template is="list" data="{{...item}}" wx:if="{{index%2==0}}"></template>
+      </block>
+    </view>
+    <view class="side_right">
+      <block wx:for="{{list}}" wx:key="">
+        <template is="list" data="{{...item}}" wx:if="{{index%2==1}}"></template>
+      </block>
+    </view>
+  </view>
+
+</view>

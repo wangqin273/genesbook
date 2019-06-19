@@ -1,0 +1,26 @@
+<template name="list">
+  <view class="list"  data-id="{{id}}" catchtap="readMore">
+    <image mode='widthFix' class="list_cover" src='{{cover}}'></image>
+    <view class="list_text">
+      <text class="list_title" wx:if="{{title}}">{{title}}</text>
+      <view class="list_count">
+        <view class="list_picture">
+          <image class="list_icon" src='/image/picture.png'></image>
+          <text class="list_number">{{imgs.length}}</text>
+        </view>
+        <view class="list_like" data-id="{{id}}" catchtap="likeIt">
+          <image class="list_icon" src="{{liked?'/image/liked.png':'/image/like.png'}}"></image>
+          <text class="list_number">{{like}} </text>
+        </view>
+      </view>
+      <view class="list_user">
+        <image class="user_avatar" src='{{avatar}}'></image>
+        <view class="user_text">
+          <text class="user_nickname" wx:if="{{nickname}}">{{nickname}}</text>
+          <text class="user_wxid" wx:if="{{wxid}}">{{wxid}}</text>
+
+        </view>
+      </view>
+    </view>
+  </view>
+</template>

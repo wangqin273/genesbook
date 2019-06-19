@@ -1,0 +1,43 @@
+<!--index.wxml-->
+<!--引入列表模板-->
+<import src="/components/list.wxml" />
+<!-- 导航栏开始 -->
+<scroll-view class="scroll_tabs" scroll-x scroll-with-animation scroll-into-view="{{toView}}">
+  <view catchtap='tabSelect' class="scroll_tabs_item" wx:for="{{tabs}}" wx:key="{{index}}" id="tabs_{{index}}" data-idx="{{index}}" data-id='{{item.id}}' data-value='{{item.name}}'>
+    <text class="{{curIdx==index?'scroll_tabs_cur':'scroll_tabs_text'}}">{{item.name}}</text>
+  </view>
+</scroll-view>
+
+<swiper wx:if="{{banner.length}}" class="top-swiper" indicator-dots="{{indicatorDots}}" interval="{{interval}}" duration="{{duration}}" curren="1"   >
+  <block wx:for="{{banner}}" wx:key="$index" >
+    <swiper-item class="swiper-item" data-title="{{item.source}}" data-website="{{item.website}}"  catchtap="bannerSelect">
+      <image src="{{item.img}}" class="swiper-imgshow" mode=""></image>
+    </swiper-item>
+  </block>
+</swiper>
+ 
+<view class="wrapper" wx:if="{{curIdx==0}}">
+  <view class="side_left">
+    <block wx:for="{{list}}" wx:key="">
+      <template is="list" data="{{...item}}" wx:if="{{index%2==0}}"></template>
+    </block>
+  </view>
+  <view class="side_right">
+    <block wx:for="{{list}}" wx:key="">
+      <template is="list" data="{{...item}}" wx:if="{{index%2==1}}"></template>
+    </block>
+  </view>
+</view>
+
+<view class="baseline" hidden="{{nobaseline}}">
+  <image class="ico_baseline" src='/image/ico_baseline.png'></image>
+  <text>我也是有底线的</text>
+</view>
+
+<view class="edit_btn" style="bottom:{{isIpx?20:30}}px" catchtap="editShare">
+   <image class="edit_btn_bg" src='/image/edit_bg.png'></image>
+  <text class="edit_btn_plus">+</text>
+   <text class="edit_btn_text">发帖</text>
+</view>
+
+<button class="btn_getuserinfo" wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>

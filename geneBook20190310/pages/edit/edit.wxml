@@ -1,0 +1,102 @@
+<view class="edit_head">
+
+  <scroll-view class="edit_album" scroll-x scroll-with-animation scroll-into-view="{{toView}}">
+    <view class="album_item" wx:for="{{albums}}" wx:key="img{{index}}" id="albums{{index}}" wx:if="{{index<9}}" style="width:{{200*r}}rpx; height:200rpx">
+      <image mode='aspectFill' data-src="{{item}}" src="{{item}}" class="slide_img" data-index="{{index}}" catchtap="previewAlbums" />
+    </view>
+    <view class="slide_item" style="width:{{200*r}}rpx; height:200rpx" id="albumsLast">
+      <image mode='aspectFill' class='slide_img' src="{{img_update}}" catchtap="imgUpdate"></image>
+    </view>
+  </scroll-view>
+  <view class="edit_list">
+    <text class="edit_title">图片比例</text>
+    <view class="edit_ratio">
+      <picker class="edit_picker" bindchange="ratioChange" value="{{k}}" range="{{ratio}}">
+        <text class="picker_ratio"> {{ratio[k]}}</text>
+      </picker>
+ <image class='edit_arrow' mode='scaleToFill' src='{{edit_arrow}}'></image>
+    </view>
+  </view>
+  <view class="edit_message">
+    <textarea class="message_text" bindinput="messageChange" placeholder="这一刻，想分享点什么爬宠..." placeholder-style="color:#999;"  show-confirm-bar="" />
+  </view>
+</view>
+
+<!-- <view class="edit_box edit_avatar">
+  <view class=" edit_list">
+    <text class="edit_title">个人头像</text>
+    <view class="edit_info">
+      <image class='edit_avatar_url' mode='aspectFill' src='{{userInfo.avatarUrl}}' catchtap="revampAvatar"></image>
+    </view>
+  </view>
+</view> -->
+<view class="edit_box">
+  <!-- <view class="edit_list" catchtap="editNickname">
+    <text class="edit_title">昵称</text>
+    <view class="edit_info">
+      <text>{{userInfo.nickName}}</text>
+    </view>
+  </view> -->
+  <view class="edit_list" catchtap="editNickname">
+    <text class="edit_title">微信号</text>
+    <view class="edit_info">
+      <input class="edit_input" bindinput="bindNameInput" placeholder="请输入微信号" />
+    </view>
+  </view>
+  <view class="edit_list">
+    <text class="edit_title">参与话题</text>
+    <view class="edit_ratio">
+      <picker class="edit_picker" bindchange="topicChange" value="{{topic_index}}" range="{{topicOpt}}" range-key="{{'name'}}">
+        <text class="{{topic_index<0?'picker_default':'picker_ratio'}}"> {{topic_index<0?'选择合适的分类和话题让更多爬友看到':topicOpt[topic_index].name}}</text>
+      </picker>
+      <image class='edit_arrow' mode='scaleToFill' src='{{edit_arrow}}'></image>
+    </view>
+  </view>
+  <view class="edit_list" catchtap="openCity">
+    <text class="edit_title">位置</text>
+    <view class="edit_info">
+      <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+    <view class="picker">
+      <text class="picker_region">{{region[0]}}-{{region[1]}}</text>
+    </view>
+  </picker>
+      <image class='edit_arrow' mode='scaleToFill' src='{{edit_arrow}}'></image>
+    </view>
+  </view>
+
+</view>
+
+
+
+<view class="submit_btn" catchtap="submitInfo">
+  <text>发布</text>
+</view>
+
+
+
+
+<!-- 相册预览 -->
+<view class="preview_box" wx:if="{{isPreview}}">
+  <swiper class="swiper_preview" current="{{currentPreview}}" bindchange="swiperChange">
+    <block wx:for="{{previewlist}}" wx:key="albumspreview{{index}}">
+      <swiper-item class="swiper_preview">
+        <view class="preview_slide">
+          <image mode='aspectFit' class="preview_img" data-src="{{item}}" src="{{item}}"></image>
+          <view class="delete_box">
+            <image mode='aspectFill' class='ico_back' src="{{img_back}}" catchtap="comebackAbums"></image>
+            <text class="preview_cur">{{curIdx}}/{{previewlist.length}}  </text>
+            <image mode='aspectFill' class='ico_delete' data-index="{{index}}" src="{{img_delete}}" catchtap="deleteaAbumsImg"  ></image>
+          </view>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
+</view>
+
+
+<!-- 遮罩层 -->
+<view class="mask" hidden="{{hideMask}}" catchtap='preventDefault' catchtouchmove='preventDefault'></view>
+ 
+
+<canvas class='canvas-poster' canvas-id='canvasposter' style="width:{{w}}px; height:{{h}}px">
+</canvas>

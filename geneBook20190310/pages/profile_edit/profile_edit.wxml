@@ -1,0 +1,165 @@
+<view class="profile_head">
+  <view class="profile_album">
+    <swiper indicator-dots="true" class="swiper_album" indicator-color="#FFCEDF" indicator-active-color="#F45189">
+      <block wx:for="{{albumsLocal}}" wx:for-item="imgs" wx:for-index="idx" wx:key="albumLocal{{idx}}">
+        <swiper-item>
+          <view class="slide_item" wx:if="{{idx==0}}">
+            <image mode='aspectFill' class='slide_img' src="{{img_update}}" catchtap="imgUpdate"></image>
+          </view>
+          <view class="slide_item" wx:for="{{imgs}}" wx:key="img{{index}}">
+            <image mode='aspectFill' data-src="{{item.image_big_url}}" src="{{item.image_big_url}}" class="slide_img" data-idx="{{idx}}" data-index="{{index}}" catchtap="previewAlbums" />
+            <!-- <image mode='aspectFill' class='img_delete' data-idx="{{idx}}" data-index="{{index}}" src="{{img_delete}}" catchtap="deleteImg" data-imgid = "{{item.id}}"></image> -->
+          </view>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+</view>
+
+<view class="profile_box profile_avatar">
+  <view class=" profile_list">
+    <text class="profile_title">个人头像</text>
+    <view class="profile_info">
+      <image class='profile_avatar_url' mode='aspectFill' src='{{userInfo.avatar_small_url}}' catchtap="revampAvatar"></image>
+      <image class='profile_arrow' mode='scaleToFill' src='{{profile_arrow}}'></image>
+    </view>
+  </view>
+</view>
+<view class="profile_box">
+  <view class="profile_list" catchtap="editNickname">
+    <text class="profile_title">昵称</text>
+    <view class="profile_info">
+      <text>{{userInfo.nickname}}</text>
+      <image class='profile_arrow' mode='scaleToFill' src='{{profile_arrow}}'></image>
+    </view>
+  </view>
+  <view class="profile_list" catchtap="editSex">
+    <text class="profile_title">性别</text>
+    <view class="profile_info">
+      <text>{{userInfo.sex ? '男' : '女'}}</text>
+      <image class='profile_arrow' mode='scaleToFill' src='{{profile_arrow}}'></image>
+    </view>
+  </view>
+
+  <view class="profile_list">
+    <text class="profile_title">生日</text>
+    <view class="profile_info">
+      <picker mode="date" value="{{date}}" bindchange="bindDateChange">
+        <view class="picker">
+          {{userInfo.birthday ? userInfo.birthday : '未设置'}}
+        </view>
+      </picker>
+      <image class='profile_arrow' mode='scaleToFill' src='{{profile_arrow}}'></image>
+    </view>
+  </view>
+</view>
+<view class="profile_box">
+  <view class="profile_list" catchtap="openStature">
+    <text class="profile_title">身高</text>
+    <view class="profile_info">
+      <text class="input"> {{userInfo.height ? userInfo.height+'cm' : '未知'}}</text>
+      <image class='profile_arrow' mode='scaleToFill' src='{{profile_arrow}}'></image>
+    </view>
+  </view>
+  <view class="profile_list" catchtap="openCity">
+    <text class="profile_title">地区</text>
+    <view class="profile_info">
+      <text class="input"> {{userInfo.province_name ? userInfo.province_name : '未知'}}-{{userInfo.city_name ? userInfo.city_name : '未知'}} </text>
+      <image class='profile_arrow' mode='scaleToFill' src='{{profile_arrow}}'></image>
+    </view>
+  </view>
+</view>
+<view class="profile_box">
+  <view class="profile_list" catchtap="editMonologue">
+    <text class="profile_title">个性签名</text>
+    <view class="profile_info">
+      <text class="profile_monologue">{{userInfo.monologue ? userInfo.monologue : '您还没有个签，赶紧写一个吧！'}}</text>
+      <image class='profile_arrow' mode='scaleToFill' src='{{profile_arrow}}'></image>
+    </view>
+  </view>
+</view>
+
+
+<!-- 遮罩层 -->
+<view class="mask" hidden="{{hideMask}}" catchtouchmove='preventDefault'></view>
+<!-- 修改昵称 -->
+<view class="edit_nick {{hideNick?'':'slider_up'}}" hidden="{{hideNick}}">
+  <input class="edit_input" placeholder-class="placeholder" type="text" maxlength="10" placeholder="请输入昵称" value="{{nicknameVal}}" bindinput="bindNicknameInput" />
+  <view class="edit_tips">
+    <text>* 字数不能超过十字</text>
+  </view>
+  <view class="edit_btn" catchtap="saveNickname">
+    <text>保存</text>
+  </view>
+  <image class="ico_close" src="{{icoClose}}" catchtap="closeMask"></image>
+</view>
+
+<!-- 修改性别 -->
+<view class="edit_sex" hidden="{{hideSex}}">
+  <view class="sex_option" wx:for="{{sexOpt}}" data-index="{{index}}" wx:key="sex{{index}}" catchtap="sexSelect">
+    <text>{{item}}</text>
+  </view>
+</view>
+<!-- 修改身高 -->
+<view hidden="{{!changestature}}" class="citypicker {{changestature?'slider_up':''}}">
+  <view class="cityheader">
+    <view catchtap="openStature" data-bool="0" class="city-cancel">取消</view>
+    <view catchtap="openStature" data-bool="1" class="city-true">确定</view>
+  </view>
+  <picker-view value="{{value}}" bindchange="bindChangeStature" class="citybody" indicator-class="citycurrent">
+    <picker-view-column>
+      <view class="stature_list" wx:for="{{statureList}}" wx:key="item">
+        <text>{{item}}cm</text>
+      </view>
+    </picker-view-column>
+
+  </picker-view>
+</view>
+
+<!-- 修改地区 -->
+<view hidden="{{!condition}}" class="citypicker {{condition?'slider_up':''}}">
+  <view class="cityheader">
+    <view catchtap="open" data-bool="0" class="city-cancel">取消</view>
+    <view catchtap="open" data-bool="1" class="city-true">确定</view>
+  </view>
+  <picker-view value="{{value}}" bindchange="bindChange" class="citybody" indicator-class="citycurrent">
+    <picker-view-column>
+      <view class="citylist" wx:for="{{provinces}}" wx:key="item">{{item}}</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view class="citylist" wx:for="{{citys}}" wx:key="item">{{item}}</view>
+    </picker-view-column>
+  </picker-view>
+</view>
+
+<!-- 修改个性签名 -->
+<view class="edit_monologue" wx:if="{{!hideMonologue}}" catchtouchmove='preventDefault'>
+  <view class="message_box">
+    <textarea ref="textarea" class="textarea" auto-height="true" placeholder="请输入个性签名" show-confirm-bar="{{showconfirmbar}}" placeholder-class="placeholder" maxlength="{{maxlens}}" fixed value="{{monologueVal}}" bindinput="bindMonologueInput">
+    </textarea>
+    <text class="corner_tip">{{textNumber}} / {{maxlens}}</text>
+  </view>
+
+  <view class="edit_btn" catchtap="saveMonologue">
+    <text>保存</text>
+  </view>
+  <image class="ico_close" src="{{icoClose}}" catchtap="closeMask"></image>
+</view>
+
+<!-- 相册预览 -->
+<view class="preview_box" wx:if="{{isPreview}}">
+  <swiper class="swiper_preview" current="{{currentPreview}}" bindchange="swiperChange">
+    <block wx:for="{{previewlist}}" wx:key="albumspreview{{index}}">
+      <swiper-item class="swiper_preview">
+        <view class="preview_slide">
+          <image mode='aspectFit' class="preview_img" data-src="{{item.image_big_url}}" src="{{item.image_big_url}}"></image>
+          <view class="delete_box">
+            <image mode='aspectFill' class='ico_back' src="{{ico_back}}" catchtap="comebackAbums"></image>
+            <text class="preview_cur">{{curIdx}}/{{previewlist.length}}  </text>
+            <image mode='aspectFill' class='ico_delete' data-index="{{index}}" src="{{img_delete}}" catchtap="deleteaAbumsImg" data-img_id="{{item.id}}"></image>
+          </view>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
+</view>
